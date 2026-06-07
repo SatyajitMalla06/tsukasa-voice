@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tsukasa Voice</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--primary:#e8345a;--accent:#ff7eb3;--dark:#0d0d14;--surface:#14141f;--surface2:#1c1c2e;--muted:#888;--text:#f0eeff;--spotify:#1DB954;--spotify-dark:#158f3f}
+  body{background:var(--dark);color:var(--text);font-family:'Outfit',sans-serif;overflow-x:hidden}
+
+  nav{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 3rem;position:sticky;top:0;z-index:100;background:rgba(13,13,20,0.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(232,52,90,0.15)}
+  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:2px;color:var(--primary)}
+  .nav-logo span{color:var(--text)}
+  .nav-links{display:flex;gap:2rem;list-style:none}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;font-weight:400;transition:color 0.2s}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{background:var(--primary);color:white;border:none;padding:0.55rem 1.4rem;border-radius:6px;font-family:'Outfit',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;transition:opacity 0.2s,transform 0.15s;text-decoration:none;display:inline-block}
+  .nav-cta:hover{opacity:0.85;transform:scale(1.03)}
+
+  .hero{min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;position:relative;overflow:hidden}
+  .hero-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(232,52,90,0.18) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none}
+  .hero-tag{display:inline-block;background:rgba(232,52,90,0.12);border:1px solid rgba(232,52,90,0.35);color:var(--accent);font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:0.35rem 1rem;border-radius:20px;margin-bottom:1.5rem}
+  .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,12vw,8.5rem);line-height:0.95;letter-spacing:3px;color:var(--text);position:relative;z-index:1}
+  .hero h1 .highlight{color:var(--primary)}
+  .hero p{max-width:520px;margin:1.5rem auto;color:var(--muted);font-size:1.05rem;line-height:1.7;font-weight:300}
+  .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:0.5rem}
+  .btn-primary{background:var(--primary);color:white;border:none;padding:0.85rem 2.2rem;border-radius:8px;font-family:'Outfit',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:opacity 0.2s,transform 0.15s;letter-spacing:0.5px;text-decoration:none;display:inline-block}
+  .btn-primary:hover{opacity:0.85;transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.2);padding:0.85rem 2.2rem;border-radius:8px;font-family:'Outfit',sans-serif;font-weight:600;font-size:1rem;cursor:pointer;transition:border-color 0.2s,transform 0.15s;text-decoration:none;display:inline-block}
+  .btn-ghost:hover{border-color:rgba(255,255,255,0.5);transform:translateY(-2px)}
+
+  .stats-bar{display:flex;justify-content:center;gap:4rem;padding:2rem;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);background:var(--surface);flex-wrap:wrap}
+  .stat-item{text-align:center}
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--primary);letter-spacing:1px;display:block}
+  .stat-label{font-size:0.78rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+
+  .section{padding:5rem 3rem;max-width:1100px;margin:0 auto}
+  .section-tag{font-size:0.75rem;letter-spacing:3px;text-transform:uppercase;color:var(--primary);font-weight:600;margin-bottom:0.8rem}
+  .section h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,4rem);letter-spacing:2px;margin-bottom:1rem;line-height:1}
+  .section-sub{color:var(--muted);font-size:1rem;max-width:480px;line-height:1.7;font-weight:300;margin-bottom:3rem}
+  .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem}
+  .feat-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.8rem;transition:border-color 0.2s,transform 0.2s;position:relative;overflow:hidden}
+  .feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--primary);opacity:0;transition:opacity 0.2s}
+  .feat-card:hover{border-color:rgba(232,52,90,0.3);transform:translateY(-4px)}
+  .feat-card:hover::before{opacity:1}
+  .feat-icon{width:44px;height:44px;background:rgba(232,52,90,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.2rem}
+  .feat-card h3{font-size:1.05rem;font-weight:600;margin-bottom:0.5rem}
+  .feat-card p{color:var(--muted);font-size:0.88rem;line-height:1.65;font-weight:300}
+
+  .spotify-section{padding:5rem 3rem;background:linear-gradient(135deg,rgba(29,185,84,0.06) 0%,rgba(13,13,20,0) 60%);border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06)}
+  .spotify-inner{max-width:1100px;margin:0 auto}
+  .spotify-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+  .spotify-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(29,185,84,0.12);border:1px solid rgba(29,185,84,0.3);color:var(--spotify);font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:0.35rem 1rem;border-radius:20px;margin-bottom:1.2rem}
+  .spotify-section h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4vw,3.5rem);letter-spacing:2px;line-height:1.05;margin-bottom:1rem}
+  .spotify-section h2 .sp-hl{color:var(--spotify)}
+  .spotify-section p{color:var(--muted);font-size:0.95rem;line-height:1.75;font-weight:300;margin-bottom:2rem}
+  .how-steps{display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem}
+  .step-row{display:flex;align-items:flex-start;gap:1rem}
+  .step-num{width:28px;height:28px;border-radius:50%;background:rgba(29,185,84,0.15);border:1px solid rgba(29,185,84,0.3);color:var(--spotify);font-size:0.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .step-text{font-size:0.9rem;color:var(--muted);line-height:1.6}
+  .step-text strong{color:var(--text);font-weight:600}
+  .btn-spotify{display:inline-flex;align-items:center;gap:0.7rem;background:var(--spotify);color:#000;border:none;padding:0.85rem 2rem;border-radius:8px;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;transition:opacity 0.2s,transform 0.15s;text-decoration:none}
+  .btn-spotify:hover{opacity:0.88;transform:translateY(-2px)}
+
+  .spotify-mock{background:var(--surface2);border:1px solid rgba(29,185,84,0.15);border-radius:16px;padding:1.5rem;position:relative;overflow:hidden}
+  .mock-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+  .mock-title{font-size:0.8rem;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+  .mock-spotify-logo{color:var(--spotify);font-size:0.78rem;font-weight:700}
+  .mock-connected{display:none;align-items:center;gap:0.5rem;background:rgba(29,185,84,0.1);border:1px solid rgba(29,185,84,0.2);border-radius:20px;padding:0.3rem 0.8rem;margin-bottom:1.2rem}
+  .mock-dot{width:7px;height:7px;border-radius:50%;background:var(--spotify);animation:pulse-green 1.5s ease-in-out infinite}
+  @keyframes pulse-green{0%,100%{opacity:1}50%{opacity:0.4}}
+  .mock-connected span{font-size:0.78rem;color:var(--spotify);font-weight:600}
+  .mock-playlists{display:flex;flex-direction:column;gap:0.6rem;filter:blur(3px);pointer-events:none}
+  .mock-pl{display:flex;align-items:center;gap:0.9rem;background:var(--surface);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:0.7rem 0.9rem;cursor:pointer;transition:border-color 0.2s}
+  .mock-pl:hover,.mock-pl.selected{border-color:rgba(29,185,84,0.4)}
+  .mock-pl-art{width:36px;height:36px;border-radius:6px;flex-shrink:0;font-size:1.1rem;display:flex;align-items:center;justify-content:center}
+  .mock-pl-info{flex:1;min-width:0}
+  .mock-pl-name{font-size:0.85rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mock-pl-meta{font-size:0.75rem;color:var(--muted)}
+  .mock-pl-check{width:18px;height:18px;border-radius:50%;background:var(--spotify);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;font-size:0.65rem;color:#000;font-weight:700}
+  .mock-import-btn{width:100%;margin-top:1rem;background:var(--spotify);color:#000;border:none;border-radius:8px;padding:0.7rem;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:opacity 0.2s}
+  .mock-import-btn:disabled{opacity:0.4;cursor:not-allowed}
+
+  .commands-section{background:var(--surface);border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);padding:5rem 3rem}
+  .commands-inner{max-width:1100px;margin:0 auto}
+  .cmd-tabs{display:flex;gap:0.6rem;flex-wrap:wrap;margin:2rem 0 1.5rem}
+  .cmd-tab{background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--muted);padding:0.4rem 1.1rem;border-radius:20px;font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:500;cursor:pointer;transition:all 0.2s}
+  .cmd-tab:hover{border-color:rgba(232,52,90,0.4);color:var(--text)}
+  .cmd-tab.active{background:rgba(232,52,90,0.12);border-color:var(--primary);color:var(--accent)}
+  .cmd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.8rem}
+  .cmd-item{background:var(--surface2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:1rem 1.2rem;display:flex;align-items:flex-start;gap:0.9rem;transition:border-color 0.2s}
+  .cmd-item:hover{border-color:rgba(232,52,90,0.25)}
+  .cmd-item.hidden{display:none}
+  .cmd-cat-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+  .dot-play{background:#e8345a}.dot-control{background:#ff7eb3}.dot-volume{background:#7c6ffd}.dot-filter{background:#f5a623}.dot-queue{background:#4cd89f}.dot-spotify{background:#1DB954}
+  .cmd-name{font-family:'Outfit',monospace;font-size:0.88rem;font-weight:700;color:var(--accent)}
+  .cmd-desc{font-size:0.8rem;color:var(--muted);margin-top:0.2rem;line-height:1.5}
+
+  .cta-section{text-align:center;padding:6rem 2rem;position:relative;overflow:hidden}
+  .cta-glow{position:absolute;width:500px;height:300px;background:radial-gradient(ellipse,rgba(232,52,90,0.15) 0%,transparent 70%);bottom:0;left:50%;transform:translateX(-50%);pointer-events:none}
+  .cta-section h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5.5rem);letter-spacing:2px;line-height:1;margin-bottom:1.2rem}
+  .cta-section p{color:var(--muted);font-size:1rem;margin-bottom:2.5rem;font-weight:300}
+
+  footer{background:var(--surface);border-top:1px solid rgba(255,255,255,0.06);padding:2rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--primary);letter-spacing:2px}
+  .footer-logo span{color:var(--text)}
+  footer p{color:var(--muted);font-size:0.8rem}
+  .footer-links{display:flex;gap:1.5rem}
+  .footer-links a{color:var(--muted);font-size:0.82rem;text-decoration:none;transition:color 0.2s}
+  .footer-links a:hover{color:var(--text)}
+
+  .wave-bar{display:flex;align-items:flex-end;gap:3px;height:40px;margin:0 auto 1.5rem;width:fit-content}
+  .wave-bar span{display:block;width:4px;background:var(--primary);border-radius:2px;animation:wave 1.2s ease-in-out infinite;opacity:0.7}
+  .wave-bar span:nth-child(1){height:14px;animation-delay:0s}
+  .wave-bar span:nth-child(2){height:24px;animation-delay:0.1s}
+  .wave-bar span:nth-child(3){height:36px;animation-delay:0.2s}
+  .wave-bar span:nth-child(4){height:28px;animation-delay:0.3s}
+  .wave-bar span:nth-child(5){height:18px;animation-delay:0.4s}
+  .wave-bar span:nth-child(6){height:30px;animation-delay:0.15s}
+  .wave-bar span:nth-child(7){height:20px;animation-delay:0.05s}
+  @keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(0.4)}}
+
+  @media(max-width:768px){
+    .spotify-layout{grid-template-columns:1fr}
+    nav{padding:1rem 1.2rem}
+    .section,.commands-section,.spotify-section{padding:3rem 1.2rem}
+    .stats-bar{gap:2rem}
+    footer{flex-direction:column;align-items:flex-start}
+    .nav-links{display:none}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">TSUKASA <span>VOICE</span></div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#spotify">Spotify Import</a></li>
+    <li><a href="#commands">Commands</a></li>
+    <li><a href="#">Support</a></li>
+  </ul>
+  <!-- REPLACE YOUR_BOT_INVITE_LINK below with your actual Discord invite URL -->
+  <a href="YOUR_BOT_INVITE_LINK" class="nav-cta">Add to Discord</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="wave-bar"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="hero-tag">🎵 Music Bot for Discord</div>
+  <h1>TSUKASA<br><span class="highlight">VOICE</span></h1>
+  <p>Crystal-clear audio. Zero latency. Built for the stage, tuned for your server. Drop the beat — Tsukasa never misses a note.</p>
+  <div class="hero-btns">
+    <a href="YOUR_BOT_INVITE_LINK" class="btn-primary">🎶 Add to Server</a>
+    <a href="#commands" class="btn-ghost">View Commands</a>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">Servers</span></div>
+  <div class="stat-item"><span class="stat-num">1%</span><span class="stat-label">Uptime</span></div>
+  <div class="stat-item"><span class="stat-num">1M+</span><span class="stat-label">Songs Played</span></div>
+  <div class="stat-item"><span class="stat-num">0ms</span><span class="stat-label">Avg Delay</span></div>
+</div>
+
+<div class="section" id="features">
+  <div class="section-tag">Why Tsukasa?</div>
+  <h2>Built Different</h2>
+  <p class="section-sub">Not just another music bot. Tsukasa Voice is engineered for servers that take their music seriously.</p>
+  <div class="features-grid">
+    <div class="feat-card"><div class="feat-icon">🎧</div><h3>High-Quality Audio</h3><p>Lossless streaming up to 320kbps. Your ears deserve better than average.</p></div>
+    <div class="feat-card"><div class="feat-icon">⚡</div><h3>Instant Playback</h3><p>No buffering, no lag. Songs start in milliseconds — every time.</p></div>
+    <div class="feat-card"><div class="feat-icon">📋</div><h3>Smart Queue</h3><p>Shuffle, loop, skip, move — full control over your playlist at all times.</p></div>
+    <div class="feat-card"><div class="feat-icon">🌐</div><h3>Multi-Source Support</h3><p>YouTube, Spotify, SoundCloud — search and play from anywhere seamlessly.</p></div>
+    <div class="feat-card"><div class="feat-icon">🎛️</div><h3>Audio Filters</h3><p>Bass boost, nightcore, vaporwave and more. Customize the vibe.</p></div>
+    <div class="feat-card"><div class="feat-icon">🔒</div><h3>DJ Mode</h3><p>Lock controls to specific roles. Keep the queue safe from chaos.</p></div>
+  </div>
+</div>
+
+<div class="spotify-section" id="spotify">
+  <div class="spotify-inner">
+    <div class="spotify-layout">
+      <div>
+        <div class="spotify-badge">🟢 Spotify Import — New</div>
+        <h2>Import Your <span class="sp-hl">Spotify</span><br>Playlists Directly</h2>
+        <p>Connect your Spotify account once and instantly queue any of your playlists into your Discord server — no copy-pasting links, no hassle.</p>
+        <div class="how-steps">
+          <div class="step-row"><div class="step-num">1</div><div class="step-text"><strong>Connect Spotify</strong> — Log in with your Spotify account securely via OAuth</div></div>
+          <div class="step-row"><div class="step-num">2</div><div class="step-text"><strong>Pick a playlist</strong> — Your playlists load automatically, just select one</div></div>
+          <div class="step-row"><div class="step-num">3</div><div class="step-text"><strong>Choose your server</strong> — Select which Discord server to send it to</div></div>
+          <div class="step-row"><div class="step-num">4</div><div class="step-text"><strong>Tsukasa queues it up</strong> — Bot starts playing instantly in your voice channel</div></div>
+        </div>
+        <!-- REPLACE YOUR_SPOTIFY_AUTH_URL with your Flask backend OAuth URL e.g. http://localhost:5000/spotify/login -->
+        <a href="YOUR_SPOTIFY_AUTH_URL" class="btn-spotify">🎵 Connect with Spotify</a>
+      </div>
+      <div class="spotify-mock">
+        <div class="mock-header">
+          <span class="mock-title">Your Playlists</span>
+          <span class="mock-spotify-logo">● Spotify</span>
+        </div>
+        <div class="mock-connected" id="mockConnected"><div class="mock-dot"></div><span>Connected</span></div>
+        <div class="mock-playlists" id="mockLocked">
+          <div class="mock-pl"><div class="mock-pl-art" style="background:rgba(232,52,90,0.15)">🎵</div><div class="mock-pl-info"><div class="mock-pl-name">Anime Bangers 🔥</div><div class="mock-pl-meta">48 songs</div></div><div class="mock-pl-check">✓</div></div>
+          <div class="mock-pl"><div class="mock-pl-art" style="background:rgba(124,111,253,0.15)">🌙</div><div class="mock-pl-info"><div class="mock-pl-name">Lofi Study Mix</div><div class="mock-pl-meta">32 songs</div></div><div class="mock-pl-check">✓</div></div>
+          <div class="mock-pl"><div class="mock-pl-art" style="background:rgba(245,166,35,0.15)">⚡</div><div class="mock-pl-info"><div class="mock-pl-name">Gaming Hype</div><div class="mock-pl-meta">67 songs</div></div><div class="mock-pl-check">✓</div></div>
+          <div class="mock-pl"><div class="mock-pl-art" style="background:rgba(76,216,159,0.15)">🌊</div><div class="mock-pl-info"><div class="mock-pl-name">Chill Vibes</div><div class="mock-pl-meta">25 songs</div></div><div class="mock-pl-check">✓</div></div>
+        </div>
+        <div id="mockOverlay" style="text-align:center;padding:1rem 0;color:var(--muted);font-size:0.85rem">🔒 Connect Spotify to see your playlists</div>
+        <button class="mock-import-btn" id="mockBtn" disabled>Queue in Discord</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="commands-section" id="commands">
+  <div class="commands-inner">
+    <div class="section-tag">Commands</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,4rem);letter-spacing:2px;line-height:1;margin-bottom:0.5rem;">Ready to Drop</h2>
+    <p style="color:var(--muted);font-size:1rem;font-weight:300;line-height:1.7;">Filter by category or browse all commands below.</p>
+    <div class="cmd-tabs">
+      <button class="cmd-tab active" onclick="filterCmds('all',this)">All</button>
+      <button class="cmd-tab" onclick="filterCmds('play',this)">▶ Playback</button>
+      <button class="cmd-tab" onclick="filterCmds('volume',this)">🔊 Volume</button>
+      <button class="cmd-tab" onclick="filterCmds('queue',this)">📋 Queue</button>
+      <button class="cmd-tab" onclick="filterCmds('filter',this)">🎛 Filters</button>
+      <button class="cmd-tab" onclick="filterCmds('spotify',this)">🟢 Spotify</button>
+      <button class="cmd-tab" onclick="filterCmds('control',this)">⚙ Controls</button>
+    </div>
+    <div class="cmd-grid">
+      <div class="cmd-item" data-cat="play"><div class="cmd-cat-dot dot-play"></div><div><div class="cmd-name">/play [song]</div><div class="cmd-desc">Search and play any track instantly</div></div></div>
+      <div class="cmd-item" data-cat="play"><div class="cmd-cat-dot dot-play"></div><div><div class="cmd-name">/pause</div><div class="cmd-desc">Pause the current track</div></div></div>
+      <div class="cmd-item" data-cat="play"><div class="cmd-cat-dot dot-play"></div><div><div class="cmd-name">/resume</div><div class="cmd-desc">Resume paused playback</div></div></div>
+      <div class="cmd-item" data-cat="play"><div class="cmd-cat-dot dot-play"></div><div><div class="cmd-name">/skip</div><div class="cmd-desc">Skip to the next track</div></div></div>
+      <div class="cmd-item" data-cat="play"><div class="cmd-cat-dot dot-play"></div><div><div class="cmd-name">/stop</div><div class="cmd-desc">Stop music and clear queue</div></div></div>
+      <div class="cmd-item" data-cat="play"><div class="cmd-cat-dot dot-play"></div><div><div class="cmd-name">/nowplaying</div><div class="cmd-desc">See what's currently playing</div></div></div>
+      <div class="cmd-item" data-cat="play"><div class="cmd-cat-dot dot-play"></div><div><div class="cmd-name">/seek [time]</div><div class="cmd-desc">Jump to a specific timestamp</div></div></div>
+      <div class="cmd-item" data-cat="play"><div class="cmd-cat-dot dot-play"></div><div><div class="cmd-name">/replay</div><div class="cmd-desc">Restart the current song</div></div></div>
+      <div class="cmd-item" data-cat="volume"><div class="cmd-cat-dot dot-volume"></div><div><div class="cmd-name">/volume [1–100]</div><div class="cmd-desc">Set volume to a specific level</div></div></div>
+      <div class="cmd-item" data-cat="volume"><div class="cmd-cat-dot dot-volume"></div><div><div class="cmd-name">/volume up</div><div class="cmd-desc">Increase volume by 10%</div></div></div>
+      <div class="cmd-item" data-cat="volume"><div class="cmd-cat-dot dot-volume"></div><div><div class="cmd-name">/volume down</div><div class="cmd-desc">Decrease volume by 10%</div></div></div>
+      <div class="cmd-item" data-cat="volume"><div class="cmd-cat-dot dot-volume"></div><div><div class="cmd-name">/volume max</div><div class="cmd-desc">Crank the volume to 100%</div></div></div>
+      <div class="cmd-item" data-cat="volume"><div class="cmd-cat-dot dot-volume"></div><div><div class="cmd-name">/mute</div><div class="cmd-desc">Mute without stopping playback</div></div></div>
+      <div class="cmd-item" data-cat="volume"><div class="cmd-cat-dot dot-volume"></div><div><div class="cmd-name">/unmute</div><div class="cmd-desc">Restore volume after muting</div></div></div>
+      <div class="cmd-item" data-cat="queue"><div class="cmd-cat-dot dot-queue"></div><div><div class="cmd-name">/queue</div><div class="cmd-desc">View the current playlist</div></div></div>
+      <div class="cmd-item" data-cat="queue"><div class="cmd-cat-dot dot-queue"></div><div><div class="cmd-name">/shuffle</div><div class="cmd-desc">Shuffle the queue randomly</div></div></div>
+      <div class="cmd-item" data-cat="queue"><div class="cmd-cat-dot dot-queue"></div><div><div class="cmd-name">/loop [off/track/queue]</div><div class="cmd-desc">Loop song or entire queue</div></div></div>
+      <div class="cmd-item" data-cat="queue"><div class="cmd-cat-dot dot-queue"></div><div><div class="cmd-name">/remove [position]</div><div class="cmd-desc">Remove a song by position</div></div></div>
+      <div class="cmd-item" data-cat="queue"><div class="cmd-cat-dot dot-queue"></div><div><div class="cmd-name">/move [from] [to]</div><div class="cmd-desc">Move a song to different position</div></div></div>
+      <div class="cmd-item" data-cat="queue"><div class="cmd-cat-dot dot-queue"></div><div><div class="cmd-name">/clearqueue</div><div class="cmd-desc">Wipe the entire queue clean</div></div></div>
+      <div class="cmd-item" data-cat="filter"><div class="cmd-cat-dot dot-filter"></div><div><div class="cmd-name">/filter bassboost</div><div class="cmd-desc">Deep bass enhancement effect</div></div></div>
+      <div class="cmd-item" data-cat="filter"><div class="cmd-cat-dot dot-filter"></div><div><div class="cmd-name">/filter nightcore</div><div class="cmd-desc">Faster tempo + pitched-up sound</div></div></div>
+      <div class="cmd-item" data-cat="filter"><div class="cmd-cat-dot dot-filter"></div><div><div class="cmd-name">/filter vaporwave</div><div class="cmd-desc">Slowed + reverbed vibes</div></div></div>
+      <div class="cmd-item" data-cat="filter"><div class="cmd-cat-dot dot-filter"></div><div><div class="cmd-name">/filter 8d</div><div class="cmd-desc">Spatial audio 8D surround effect</div></div></div>
+      <div class="cmd-item" data-cat="filter"><div class="cmd-cat-dot dot-filter"></div><div><div class="cmd-name">/filter karaoke</div><div class="cmd-desc">Remove vocals from the track</div></div></div>
+      <div class="cmd-item" data-cat="filter"><div class="cmd-cat-dot dot-filter"></div><div><div class="cmd-name">/filter off</div><div class="cmd-desc">Disable all active filters</div></div></div>
+      <div class="cmd-item" data-cat="spotify"><div class="cmd-cat-dot dot-spotify"></div><div><div class="cmd-name">/spotify connect</div><div class="cmd-desc">Link your Spotify account to the bot</div></div></div>
+      <div class="cmd-item" data-cat="spotify"><div class="cmd-cat-dot dot-spotify"></div><div><div class="cmd-name">/spotify playlist [name]</div><div class="cmd-desc">Queue a saved Spotify playlist</div></div></div>
+      <div class="cmd-item" data-cat="spotify"><div class="cmd-cat-dot dot-spotify"></div><div><div class="cmd-name">/spotify liked</div><div class="cmd-desc">Queue your Spotify liked songs</div></div></div>
+      <div class="cmd-item" data-cat="spotify"><div class="cmd-cat-dot dot-spotify"></div><div><div class="cmd-name">/spotify disconnect</div><div class="cmd-desc">Unlink your Spotify account</div></div></div>
+      <div class="cmd-item" data-cat="control"><div class="cmd-cat-dot dot-control"></div><div><div class="cmd-name">/join</div><div class="cmd-desc">Pull Tsukasa into your voice channel</div></div></div>
+      <div class="cmd-item" data-cat="control"><div class="cmd-cat-dot dot-control"></div><div><div class="cmd-name">/leave</div><div class="cmd-desc">Disconnect from voice channel</div></div></div>
+      <div class="cmd-item" data-cat="control"><div class="cmd-cat-dot dot-control"></div><div><div class="cmd-name">/djmode [on/off]</div><div class="cmd-desc">Lock controls to DJ role only</div></div></div>
+      <div class="cmd-item" data-cat="control"><div class="cmd-cat-dot dot-control"></div><div><div class="cmd-name">/prefix [char]</div><div class="cmd-desc">Change the bot command prefix</div></div></div>
+    </div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <h2>READY TO <span style="color:var(--primary)">VIBE?</span></h2>
+  <p>Add Tsukasa Voice to your server — it's free, forever.</p>
+  <a href="YOUR_BOT_INVITE_LINK" class="btn-primary" style="font-size:1.1rem;padding:1rem 3rem;">🎶 Add Tsukasa Voice</a>
+</section>
+
+<footer>
+  <div class="footer-logo">TSUKASA <span>VOICE</span></div>
+  <div class="footer-links"><a href="#">Invite</a><a href="#">Support Server</a><a href="#">Privacy Policy</a><a href="#">Terms</a></div>
+  <p>© 2026 Tsukasa Voice. All rights reserved.</p>
+</footer>
+
+<script>
+  function filterCmds(cat, btn) {
+    document.querySelectorAll('.cmd-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.cmd-item').forEach(item => {
+      if (cat === 'all' || item.dataset.cat === cat) item.classList.remove('hidden');
+      else item.classList.add('hidden');
+    });
+  }
+</script>
+</body>
+</html>
